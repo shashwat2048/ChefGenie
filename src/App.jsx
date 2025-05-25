@@ -114,7 +114,7 @@ export default function App() {
   const [ingredients, setIngredients] = useState('');
   const [recipe, setRecipe] = useState('');
   const [loading, setLoading] = useState(false);
-  const [dark, setDark] = useState(false);
+  const [dark, setDark] = useState(true);
   const [titleVisible, setTitleVisible] = useState(false);
   const [recipeVisible, setRecipeVisible] = useState(false);
   const [themeTransitioning, setThemeTransitioning] = useState(false);
