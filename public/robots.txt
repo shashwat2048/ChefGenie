@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://chefgenie-ai.vercel.app/sitemap.xml

@@ -3,8 +3,25 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "description": "ChefGenie (Chef Genie) — AI recipe generator that creates recipes from dish names or ingredients with optional cuisine preference.",
+  "author": "Shashwat Singhal",
+  "homepage": "https://chefgenie-ai.vercel.app",
+  "keywords": [
+    "ChefGenie",
+    "Chef Genie",
+    "chefgenie",
+    "recipe generator",
+    "recipie generator",
+    "ai recipe generator",
+    "recipe maker",
+    "generate recipe",
+    "ingredients to recipe",
+    "gemini",
+    "shashwat shinghal"
+  ],
   "scripts": {
     "dev": "vite",
+    "prebuild": "node scripts/generate-seo-files.mjs",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
