@@ -23,9 +23,9 @@
 
     <meta name="theme-color" content="#FF914D" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#1F2937" media="(prefers-color-scheme: dark)" />
-    <!-- Use a public asset so it works in production builds -->
-    <link rel="icon" href="/vite.svg" type="image/svg+xml" />
-    <link rel="apple-touch-icon" href="/vite.svg" />
+    <!-- Icons (Vite will fingerprint /src asset URLs in production) -->
+    <link rel="icon" type="image/png" href="/src/assets/chefGenielogo.png" />
+    <link rel="apple-touch-icon" href="/src/assets/chefGenielogo.png" />
 
     <!-- OpenGraph / Facebook -->
     <meta property="og:type" content="website" />
@@ -35,9 +35,12 @@
       property="og:description"
       content="Tell ChefGenie a dish name or what ingredients you have — optionally add a cuisine — and get a complete recipe instantly."
     />
-    <meta property="og:image" content="/vite.svg" />
+    <meta
+      property="og:image"
+      content="src/assets/chefGenielogo.png"
+    />
     <meta property="og:image:alt" content="ChefGenie (Chef Genie) — AI Recipe Generator" />
-    <meta property="og:url" content="%VITE_SITE_URL%" />
+    <meta property="og:url" content="%VITE_SITE_URL%/" />
     <meta property="og:locale" content="en_US" />
 
     <!-- Twitter -->
@@ -47,7 +50,10 @@
       name="twitter:description"
       content="AI recipe generator for dish names or ingredients. Add a cuisine (Indian/Mexican/Italian) and get a recipe instantly."
     />
-    <meta name="twitter:image" content="/vite.svg" />
+    <meta
+      name="twitter:image"
+      content="src/assets/chefGenielogo.png"
+    />
     <meta name="twitter:image:alt" content="ChefGenie (Chef Genie) — AI Recipe Generator" />
 
     <!-- Structured data -->
