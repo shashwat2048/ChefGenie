@@ -9,7 +9,7 @@
     <title>ChefGenie (Chef Genie) — AI Recipe Generator by Shashwat Singhal</title>
     <meta
       name="description"
-      content="ChefGenie (Chef Genie) is an AI recipe generator that creates delicious recipes from a dish name or the ingredients you have. Generate Indian, Mexican, Italian and more in seconds — by Shashwat Singhal."
+      content="ChefGenie (Chef Genie) is an AI recipe generator. Enter a dish name or ingredients, choose Indian/Mexican/Italian cuisine, and get a recipe fast."
     />
     <meta
       name="keywords"
@@ -33,7 +33,7 @@
     <meta property="og:title" content="ChefGenie (Chef Genie) — AI Recipe Generator" />
     <meta
       property="og:description"
-      content="Tell ChefGenie a dish name or what ingredients you have — optionally add a cuisine — and get a complete recipe instantly."
+      content="Enter a dish name or ingredients, pick a cuisine (Indian/Mexican/Italian), and ChefGenie generates a complete recipe in seconds."
     />
     <meta
       property="og:image"
@@ -48,7 +48,7 @@
     <meta name="twitter:title" content="ChefGenie — AI Recipe Generator" />
     <meta
       name="twitter:description"
-      content="AI recipe generator for dish names or ingredients. Add a cuisine (Indian/Mexican/Italian) and get a recipe instantly."
+      content="Dish name or ingredients → pick a cuisine → ChefGenie generates a complete recipe in seconds."
     />
     <meta
       name="twitter:image"
@@ -91,6 +91,10 @@
     </script>
   </head>
   <body>
+    <!-- Static H1 for crawlers/tools that don't execute JS; visually hidden but accessible -->
+    <h1 style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">
+      ChefGenie (Chef Genie) — AI Recipe Generator
+    </h1>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
