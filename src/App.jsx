@@ -1,8 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { Search, Sun, Moon, ChefHat, Circle, Sparkles, Heart } from 'lucide-react';
+import { GoogleGenAI } from "@google/genai";
 import chefgenie from '../src/assets/chefGenielogo.png'
-
-const GEMINI_API_KEY = 'AIzaSyD__dfd9rqq4bAjxGMLezTglrTs2DDaU0o';
 
 function parseRecipe(raw) {
   const lines = raw.split('\n').map((l) => l.trim()).filter(Boolean);
@@ -112,6 +111,7 @@ const FloatingParticles = ({ dark }) => {
 
 export default function App() {
   const [ingredients, setIngredients] = useState('');
+  const [cuisine, setCuisine] = useState('');
   const [recipe, setRecipe] = useState('');
   const [loading, setLoading] = useState(false);
   const [dark, setDark] = useState(true);
@@ -281,35 +281,58 @@ export default function App() {
       });
     }
     
-    const prompt = `Create a simple, tasty recipe using these ingredients: ${ingredients}. 
+    const prompt = `You are ChefGenie, a practical home-chef assistant.
 
-Format your response exactly like this:
+User input (this may be either a dish name OR a list of ingredients):
+${ingredients}
+
+Cuisine preference (optional):
+${cuisine || 'none'}
+
+Task:
+- First decide what the user input is:
+  - If it looks like a dish name (e.g., "Butter Chicken", "Tacos al Pastor"), generate a recipe for that dish.
+  - If it looks like an ingredients list (comma-separated items like "chicken, rice, tomatoes"), choose a suitable dish and generate a recipe that uses those ingredients.
+- If a cuisine preference is provided, adapt the flavor profile to match it.
+
+Rules:
+- Use realistic quantities (grams/cups/spoons) and keep it beginner-friendly.
+- Prefer 15–30 minutes total time.
+- Include 6–10 numbered steps with clear actions + timings/heat when relevant.
+- You may use common pantry basics (water, salt, pepper, oil).
+- If something essential is missing, suggest ONE optional addition at the very end.
+- No extra sections, no tables, no code fences.
+- Follow the exact output format below (including headings and bullet/number styles).
+
 # [Recipe Name]
 
 **Ingredients:**
-* ingredient 1
-* ingredient 2
-* etc.
+* ingredient 1 (with quantity)
+* ingredient 2 (with quantity)
+* ...
 
 **Instructions:**
 1. step 1
 2. step 2
-3. etc.
+3. ...
 
+Optional addition (only if truly needed): [one item]
 Make sure to include a clear recipe name as the title and use proper formatting.`;
     
     try {
-      const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }),
-        }
-      );
-      const data = await response.json();
-      const aiText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-      setRecipe(aiText || 'Oops, something went wrong.');
+      const apiKey = import.meta.env.GEMINI_API_KEY;
+      if (!apiKey) {
+        setRecipe('Missing GEMINI_API_KEY. Add it to your .env file and restart the dev server.');
+        return;
+      }
+
+      const ai = new GoogleGenAI({ apiKey });
+      const response = await ai.models.generateContent({
+        model: "gemini-2.5-flash",
+        contents: prompt,
+      });
+
+      setRecipe(response.text || 'Oops, something went wrong.');
     } catch (err) {
       console.error(err);
       setRecipe('Error generating recipe.');
@@ -453,7 +476,7 @@ Make sure to include a clear recipe name as the title and use proper formatting.
         <p className={`mb-6 sm:mb-8 text-center text-base sm:text-lg transition-all duration-500 delay-300 max-w-2xl ${
           titleVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-3'
         } ${dark ? 'text-gray-300' : 'text-gray-600'}`}>
-          Don't know what to make? Just tell me what you have and I'll create something amazing for you! ✨
+          Tell me a dish name or what ingredients you have — and if you want, add a cuisine (Indian, Mexican, Italian). I’ll create something amazing for you! ✨
         </p>
 
         <div className={`w-full max-w-md lg:max-w-lg flex flex-col gap-4 sm:gap-6 transition-all duration-500 delay-500 ${
@@ -463,7 +486,7 @@ Make sure to include a clear recipe name as the title and use proper formatting.
             <input
               ref={inputRef}
               type="text"
-              placeholder="Enter ingredients (e.g., chicken, rice, tomatoes)"
+              placeholder="Dish name (e.g., Butter Chicken) OR ingredients (e.g., chicken, rice, tomatoes)"
               value={ingredients}
               onChange={(e) => setIngredients(e.target.value)}
               className={`w-full px-4 sm:px-6 py-3 sm:py-4 pr-12 sm:pr-14 rounded-xl sm:rounded-2xl border-2 transition-all duration-300 focus:outline-none focus:ring-4 text-base sm:text-lg ${
@@ -480,6 +503,24 @@ Make sure to include a clear recipe name as the title and use proper formatting.
               size={20} 
             />
             <div className={`absolute inset-0 rounded-xl sm:rounded-2xl blur-lg opacity-0 group-hover:opacity-30 transition-opacity duration-300 ${
+              dark ? 'bg-orange-400' : 'bg-orange-300'
+            }`} style={{ zIndex: -1 }}></div>
+          </div>
+
+          <div className="relative group">
+            <input
+              type="text"
+              placeholder="Cuisine (optional): Indian / Mexican / Italian..."
+              value={cuisine}
+              onChange={(e) => setCuisine(e.target.value)}
+              className={`w-full px-4 sm:px-6 py-3 sm:py-4 rounded-xl sm:rounded-2xl border-2 transition-all duration-300 focus:outline-none focus:ring-4 text-base sm:text-lg ${
+                dark 
+                  ? 'bg-gray-800/60 backdrop-blur-sm border-gray-700 text-white placeholder-gray-400 focus:border-orange-400 focus:ring-orange-400/30' 
+                  : 'bg-white/70 backdrop-blur-sm border-gray-200 text-gray-800 placeholder-gray-500 focus:border-orange-400 focus:ring-orange-400/30 shadow-lg focus:shadow-xl'
+              } group-hover:shadow-lg transform transition-transform group-hover:scale-[1.01]`}
+              onKeyPress={(e) => e.key === 'Enter' && handleGetRecipe()}
+            />
+            <div className={`absolute inset-0 rounded-xl sm:rounded-2xl blur-lg opacity-0 group-hover:opacity-20 transition-opacity duration-300 ${
               dark ? 'bg-orange-400' : 'bg-orange-300'
             }`} style={{ zIndex: -1 }}></div>
           </div>
