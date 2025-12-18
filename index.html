@@ -23,9 +23,9 @@
 
     <meta name="theme-color" content="#FF914D" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#1F2937" media="(prefers-color-scheme: dark)" />
-    <!-- Icons (Vite will fingerprint /src asset URLs in production) -->
-    <link rel="icon" type="image/png" href="/src/assets/chefGenielogo.png" />
-    <link rel="apple-touch-icon" href="/src/assets/chefGenielogo.png" />
+    <!-- Icons (served from /public) -->
+    <link rel="icon" type="image/png" href="/chefGenielogo.png" />
+    <link rel="apple-touch-icon" href="/chefGenielogo.png" />
 
     <!-- OpenGraph / Facebook -->
     <meta property="og:type" content="website" />
@@ -37,7 +37,7 @@
     />
     <meta
       property="og:image"
-      content="src/assets/chefGenielogo.png"
+      content="%VITE_SITE_URL%/chefGenielogo.png"
     />
     <meta property="og:image:alt" content="ChefGenie (Chef Genie) — AI Recipe Generator" />
     <meta property="og:url" content="%VITE_SITE_URL%/" />
@@ -52,7 +52,7 @@
     />
     <meta
       name="twitter:image"
-      content="src/assets/chefGenielogo.png"
+      content="%VITE_SITE_URL%/chefGenielogo.png"
     />
     <meta name="twitter:image:alt" content="ChefGenie (Chef Genie) — AI Recipe Generator" />
 
